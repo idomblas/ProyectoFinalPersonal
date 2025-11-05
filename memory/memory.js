@@ -6,21 +6,24 @@ window.memory = function (mainContainer) {
   `;
 };
 
-const emojis = [
-  "🍎",
-  "🍌",
-  "🥝",
-  "🍓",
-  "🍇",
-  "🍍",
-  "🍉",
-  "🍊",
-  "🍋",
-  "🍒",
-  "🍑",
-  "🥭",
+const rutasImagenes = [
+  "resources/flauta.jpg",
+  "resources/campanilla.jpg",
+  "resources/caracola.jpg",
+  "resources/cristal.jpg",
+  "resources/flores.jpg",
+  "resources/fruto.jpg",
+  "resources/guantes.jpg",
+  "resources/lupa.jpg",
+  "resources/mapa.jpg",
+  "resources/medallon.jpg",
+  "resources/pocion.jpg",
+  "resources/polvos.jpg",
 ];
-let cartasArray = [...emojis, ...emojis];
+
+const rutaImagenReverso = "resources/reverso.jpg";
+
+let cartasArray = [...rutasImagenes, ...rutasImagenes];
 
 const tablero = document.getElementById("tableroJuego");
 const displayTiempo = document.getElementById("temporizador");
@@ -45,10 +48,10 @@ function barajarCartas(array) {
 function crearTablero() {
   barajarCartas(cartasArray);
 
-  cartasArray.forEach((emoji, index) => {
+  cartasArray.forEach((rutaImagen, index) => {
     const carta = document.createElement("div");
     carta.classList.add("carta");
-    carta.dataset.emoji = emoji;
+    carta.dataset.imagen = rutaImagen;
     carta.dataset.index = index;
 
     carta.addEventListener("click", manejarVolteo);
@@ -58,11 +61,19 @@ function crearTablero() {
 
     const anverso = document.createElement("div");
     anverso.classList.add("cara", "anverso");
-    anverso.innerHTML = emoji;
+
+    const img = document.createElement("img");
+    img.src = rutaImagen;
+    img.alt = "Ilustracion de carta";
+    anverso.appendChild(img);
 
     const reverso = document.createElement("div");
     reverso.classList.add("cara", "reverso");
-    reverso.innerHTML = "🎯";
+
+    const imgReverso = document.createElement("img");
+    imgReverso.src = rutaImagenReverso;
+    imgReverso.alt = "Reverso de carta";
+    reverso.appendChild(imgReverso);
 
     contenido.appendChild(anverso);
     contenido.appendChild(reverso);
@@ -72,10 +83,10 @@ function crearTablero() {
 }
 
 function actualizarDisplayTiempo() {
-  const minutos = Math.floor(tiempoLimite / 120)
+  const minutos = Math.floor(tiempoLimite / 60)
     .toString()
     .padStart(2, "0");
-  const segundos = (tiempoLimite % 120).toString().padStart(2, "0");
+  const segundos = (tiempoLimite % 60).toString().padStart(2, "0");
   displayTiempo.textContent = `Tiempo: ${minutos}:${segundos}`;
 }
 
@@ -100,7 +111,7 @@ function detenerTemporizador() {
 function verificarPar() {
   const [carta1, carta2] = cartasVolteadas;
 
-  if (carta1.dataset.emoji === carta2.dataset.emoji) {
+  if (carta1.dataset.imagen === carta2.dataset.imagen) {
     carta1.classList.add("emparejada");
     carta2.classList.add("emparejada");
 
