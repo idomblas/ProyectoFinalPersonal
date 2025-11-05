@@ -35,7 +35,7 @@ let paresEncontrados = 0;
 let movimientos = 0;
 
 const TIEMPO_VISTAZO = 2000;
-let tiempoLimite = 120;
+let tiempoLimite = 60;
 let temporizadorInterval;
 
 function barajarCartas(array) {
@@ -169,14 +169,19 @@ function finDelJuego(ganado) {
   let mensaje = "";
 
   const botinAsegurado = paresEncontrados;
-  const tiempoConsumido = 120 - tiempoLimite;
+  const tiempoConsumido = 60 - tiempoLimite;
 
   if (ganado || paresEncontrados === 12) {
-    const tiempoConsumido = 120 - tiempoLimite;
+    const tiempoConsumido = 60 - tiempoLimite;
 
     mensaje = `✨ ¡Botín Máximo Asegurado! ¡Conseguiste ${botinAsegurado} objetos mágicos en ${tiempoConsumido} segundos! El héroe está listo para la Mazmorra.`;
 
-    registrarPuntuacion(nombreJugadorActual, movimientos, tiempoConsumido);
+    registrarPuntuacion(
+      nombreJugadorActual,
+      movimientos,
+      tiempoConsumido,
+      botinAsegurado
+    );
   } else {
     mensaje = `⏱️ ¡Tiempo agotado! Solo conseguiste ${botinAsegurado} objetos de 12. La mazmorra será difícil. Movimientos: ${movimientos}.`;
     todasLasCartas.forEach((c) => c.classList.add("volteada"));
@@ -269,7 +274,7 @@ function mostrarPodio() {
     const item = document.createElement("li");
     const medalla = ["🥇", "🥈", "🥉", "🏅", "🏅"][index] || "▪️";
 
-    item.innerHTML = `${medalla} **${score.nombre}** — Botín: **${score.puntuacion.botin}** objetos, Movs: ${score.puntuacion.movimientos}, Tiempo: ${score.puntuacion.tiempo}s`;
+    item.innerHTML = `${medalla} **${score.nombre}** — Botín: ${score.puntuacion.botin} objetos, Movs: ${score.puntuacion.movimientos}, Tiempo: ${score.puntuacion.tiempo}s`;
     item.style.listStyle = "none";
     item.style.padding = "5px 0";
     listaPodio.appendChild(item);
@@ -280,7 +285,7 @@ function reiniciarJuego() {
   bloqueandoClics = false;
   paresEncontrados = 0;
   movimientos = 0;
-  tiempoLimite = 120;
+  tiempoLimite = 60;
 
   tablero.innerHTML = "";
 
