@@ -168,14 +168,17 @@ function finDelJuego(ganado) {
 
   let mensaje = "";
 
-  if (ganado) {
+  const botinAsegurado = paresEncontrados;
+  const tiempoConsumido = 120 - tiempoLimite;
+
+  if (ganado || paresEncontrados === 12) {
     const tiempoConsumido = 120 - tiempoLimite;
 
-    mensaje = `¡Felicidades, ${nombreJugadorActual}! Ganaste en ${movimientos} movimientos y ${tiempoConsumido} segundos.`;
+    mensaje = `✨ ¡Botín Máximo Asegurado! ¡Conseguiste ${botinAsegurado} objetos mágicos en ${tiempoConsumido} segundos! El héroe está listo para la Mazmorra.`;
 
     registrarPuntuacion(nombreJugadorActual, movimientos, tiempoConsumido);
   } else {
-    mensaje = `¡Tiempo agotado! Has perdido. Movimientos: ${movimientos}.`;
+    mensaje = `⏱️ ¡Tiempo agotado! Solo conseguiste ${botinAsegurado} objetos de 12. La mazmorra será difícil. Movimientos: ${movimientos}.`;
     todasLasCartas.forEach((c) => c.classList.add("volteada"));
   }
 
@@ -185,12 +188,13 @@ function finDelJuego(ganado) {
   }, 500);
 }
 
-function registrarPuntuacion(nombre, movs, tiempo) {
+function registrarPuntuacion(nombre, movs, tiempo, botinAsegurado) {
   let puntuaciones = cargarPuntuaciones();
 
   const nuevaPuntuacion = {
     nombre: nombre,
     puntuacion: {
+      botin: botinAsegurado,
       movimientos: movs,
       tiempo: tiempo,
     },
@@ -199,6 +203,9 @@ function registrarPuntuacion(nombre, movs, tiempo) {
   puntuaciones.push(nuevaPuntuacion);
 
   puntuaciones.sort((a, b) => {
+    if (b.puntuacion.botin !== a.puntuacion.botin) {
+      return b.puntuacion.botin - a.puntuacion.botin;
+    }
     if (a.puntuacion.movimientos !== b.puntuacion.movimientos) {
       return a.puntuacion.movimientos - b.puntuacion.movimientos;
     }
@@ -258,10 +265,11 @@ function mostrarPodio() {
   }
 
   puntuaciones.forEach((score, index) => {
+    const botin = score.puntuacion.botin || 0;
     const item = document.createElement("li");
     const medalla = ["🥇", "🥈", "🥉", "🏅", "🏅"][index] || "▪️";
 
-    item.innerHTML = `${medalla} **${score.nombre}** — Movs: ${score.puntuacion.movimientos}, Tiempo: ${score.puntuacion.tiempo}s`;
+    item.innerHTML = `${medalla} **${score.nombre}** — Botín: **${score.puntuacion.botin}** objetos, Movs: ${score.puntuacion.movimientos}, Tiempo: ${score.puntuacion.tiempo}s`;
     item.style.listStyle = "none";
     item.style.padding = "5px 0";
     listaPodio.appendChild(item);
