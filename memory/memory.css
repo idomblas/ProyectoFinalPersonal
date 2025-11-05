@@ -1,0 +1,116 @@
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #f0f0f0;
+  margin: 20px;
+}
+
+/* --- ESTILOS DEL ENCABEZADO Y INFO --- */
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.info-juego {
+  display: flex;
+  justify-content: space-around;
+  width: 300px;
+  margin: 10px auto;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+/* --- CONFIGURACIÓN DEL TABLERO con CSS GRID --- */
+.tablero-juego {
+  /* Usamos CSS Grid para la disposición armónica 6x4 */
+  display: grid;
+
+  /* 6 columnas de igual ancho (1fr) */
+  grid-template-columns: repeat(6, 1fr);
+
+  gap: 10px; /* Espacio entre las cartas */
+  width: 90vw; /* Ancho que ocupa el 90% de la ventana */
+  max-width: 1200px; /* Límite para pantallas grandes */
+  padding: 10px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Adaptación para móviles (cambio a 4x6 para evitar cartas diminutas) */
+@media (max-width: 768px) {
+  .tablero-juego {
+    /* Reducimos a 4 columnas en móviles */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    width: 95vw;
+  }
+}
+
+/* --- ESTILOS DE LA CARTA --- */
+.carta {
+  /* La clave para el volteo 3D */
+  perspective: 1000px;
+
+  /* Para que las caras se superpongan */
+  position: relative;
+
+  /* Aseguramos que la carta sea cuadrada (1:1) */
+  width: 100%;
+  padding-bottom: 100%; /* Truco para altura igual al ancho */
+  cursor: pointer;
+}
+
+/* Contenedor que rota */
+.contenido-carta {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s; /* Velocidad de la animación de volteo */
+  transform-style: preserve-3d; /* Permite el volteo 3D */
+}
+
+/* Estado: Volteado */
+.carta.volteada .contenido-carta {
+  transform: rotateY(180deg);
+}
+
+/* Estilo de la carta emparejada */
+.carta.emparejada {
+  /* Opcional: Desaparece lentamente o cambia de color */
+  opacity: 0.5;
+  pointer-events: none; /* No se puede volver a hacer clic */
+}
+
+/* Cara anverso y reverso */
+.cara {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden; /* Oculta la cara cuando está volteada */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2em;
+  border-radius: 6px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  user-select: none; /* Evita que el texto/emoji se seleccione */
+}
+
+/* Reverso (lo que se ve al inicio) */
+.reverso {
+  background-color: #3f51b5; /* Azul llamativo */
+  color: white;
+  font-size: 1.5em;
+  border: 5px solid #283593;
+}
+
+/* Anverso (la imagen o emoji) */
+.anverso {
+  background-color: #ffffff;
+  color: #333;
+  transform: rotateY(180deg); /* Empieza volteada */
+}
